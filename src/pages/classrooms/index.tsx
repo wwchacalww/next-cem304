@@ -9,12 +9,32 @@ import {
   Flex,
   Heading,
   Tab,
+  Table,
+  TableCaption,
+  TableContainer,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Tbody,
+  Select,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  Button,
 } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
+import { useState } from "react";
+
+type StudentProps = {
+  id: string,
+  name: string,
+  ieducar: number,
+  gender: string,
+  anne: string,
+  birth_day: string,
+}
 
 type ClassProps = {
   id: string;
@@ -22,6 +42,7 @@ type ClassProps = {
   anne: string;
   shift: string;
   level: string;
+  students: StudentProps[];
 };
 
 type Props = {
@@ -29,6 +50,24 @@ type Props = {
 };
 
 export default function Classrooms({ classrooms }: Props) {
+  const [ classroomId, setClassroomId] = useState("");
+  const [ studentId, setStudentId] = useState("");
+
+  const hadleChangeClassroom = async (id: string) => {
+    setStudentId(id);
+    const data = {
+      id,
+      classroom_id: classroomId,
+    }
+    const response = await api.put("students/change", data);
+    console.log(response.data);
+  }
+
+  const optClass = (
+    <Select placeholder='Trocar de turma' onChange={(e) => setClassroomId(e.target.value)}>
+      { classrooms.map( (classroom) => ( <option key={classroom.id} value={classroom.id}>{classroom.name}</option>))}
+    </Select>
+  );
   return (
     <>
       <Box as="div">
@@ -58,18 +97,36 @@ export default function Classrooms({ classrooms }: Props) {
                                     _expanded={{ bg: "tomato", color: "white" }}
                                   >
                                     <Box as="span" flex="1" textAlign="left">
-                                      {classroom.name}
+                                      {classroom.name} - { classroom.students.length} alunos
                                     </Box>
                                     <AccordionIcon />
                                   </AccordionButton>
                                 </h2>
                                 <AccordionPanel pb={4}>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipiscing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua.
-                                  Ut enim ad minim veniam, quis nostrud
-                                  exercitation ullamco laboris nisi ut aliquip
-                                  ex ea commodo consequat.
+                                
+                                  <TableContainer>
+                                    <Table variant='simple'>
+                                      <TableCaption>Imperial to metric conversion factors</TableCaption>
+                                      <Thead>
+                                        <Tr>
+                                          <Th>Nome do estudante</Th>
+                                          <Th>Opções</Th>
+                                        </Tr>
+                                      </Thead>
+                                      <Tbody>
+                                      {classroom.students.map( (std) => (
+                                        <Tr key={std.id}>
+                                          <Td>{std.name}</Td>
+                                          <Td>{ optClass }</Td>
+                                          <Td><Button bg={"green.500"} color={"white"} onClick={() => hadleChangeClassroom(std.id)}>
+                                              Salvar
+                                            </Button></Td>
+                                        </Tr>
+                                      ))}
+                                      </Tbody>
+                                    </Table>
+                                  </TableContainer>
+                                  
                                 </AccordionPanel>
                               </AccordionItem>
                             </div>
@@ -80,7 +137,7 @@ export default function Classrooms({ classrooms }: Props) {
                   </Accordion>
                 </TabPanel>
                 <TabPanel>
-                  <p>Turmas do 2º ano do Ensino Médio 2023</p>
+                <p>Turmas do 2º ano do Ensino Médio 2023</p>
                   <Accordion allowToggle>
                     <>
                       {classrooms.map((classroom) => {
@@ -93,18 +150,36 @@ export default function Classrooms({ classrooms }: Props) {
                                     _expanded={{ bg: "tomato", color: "white" }}
                                   >
                                     <Box as="span" flex="1" textAlign="left">
-                                      {classroom.name}
+                                      {classroom.name} - { classroom.students.length} alunos
                                     </Box>
                                     <AccordionIcon />
                                   </AccordionButton>
                                 </h2>
                                 <AccordionPanel pb={4}>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipiscing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua.
-                                  Ut enim ad minim veniam, quis nostrud
-                                  exercitation ullamco laboris nisi ut aliquip
-                                  ex ea commodo consequat.
+                                
+                                  <TableContainer>
+                                    <Table variant='simple'>
+                                      <TableCaption>Imperial to metric conversion factors</TableCaption>
+                                      <Thead>
+                                        <Tr>
+                                          <Th>Nome do estudante</Th>
+                                          <Th>Opções</Th>
+                                        </Tr>
+                                      </Thead>
+                                      <Tbody>
+                                      {classroom.students.map( (std) => (
+                                        <Tr key={std.id}>
+                                          <Td>{std.name}</Td>
+                                          <Td>{ optClass }</Td>
+                                          <Td><Button bg={"green.500"} color={"white"} onClick={() => hadleChangeClassroom(std.id)}>
+                                              Salvar
+                                            </Button></Td>
+                                        </Tr>
+                                      ))}
+                                      </Tbody>
+                                    </Table>
+                                  </TableContainer>
+                                  
                                 </AccordionPanel>
                               </AccordionItem>
                             </div>
@@ -128,18 +203,36 @@ export default function Classrooms({ classrooms }: Props) {
                                     _expanded={{ bg: "tomato", color: "white" }}
                                   >
                                     <Box as="span" flex="1" textAlign="left">
-                                      {classroom.name}
+                                      {classroom.name} - { classroom.students.length} alunos
                                     </Box>
                                     <AccordionIcon />
                                   </AccordionButton>
                                 </h2>
                                 <AccordionPanel pb={4}>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipiscing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua.
-                                  Ut enim ad minim veniam, quis nostrud
-                                  exercitation ullamco laboris nisi ut aliquip
-                                  ex ea commodo consequat.
+                                
+                                  <TableContainer>
+                                    <Table variant='simple'>
+                                      <TableCaption>Imperial to metric conversion factors</TableCaption>
+                                      <Thead>
+                                        <Tr>
+                                          <Th>Nome do estudante</Th>
+                                          <Th>Opções</Th>
+                                        </Tr>
+                                      </Thead>
+                                      <Tbody>
+                                      {classroom.students.map( (std) => (
+                                        <Tr key={std.id}>
+                                          <Td>{std.name}</Td>
+                                          <Td>{ optClass }</Td>
+                                          <Td><Button bg={"green.500"} color={"white"} onClick={() => hadleChangeClassroom(std.id)}>
+                                              Salvar
+                                            </Button></Td>
+                                        </Tr>
+                                      ))}
+                                      </Tbody>
+                                    </Table>
+                                  </TableContainer>
+                                  
                                 </AccordionPanel>
                               </AccordionItem>
                             </div>
@@ -160,13 +253,28 @@ export default function Classrooms({ classrooms }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const list = await api.get("classrooms/list?year=2023");
+  
   const classrooms = list.data.map((classroom: any) => {
+    let students: StudentProps[] = []
+    if(classroom.students) {
+      students = classroom.students.map( (std: any) => {
+        return {
+          id: std.id,
+          name: std.Name,
+          ieducar: std.ieducar,
+          gender: std.gender,
+          anne: std.anne,
+          birth_day: std.birth_day,
+        }
+      })
+    }
     return {
       id: classroom.id,
       name: classroom.Name,
       anne: classroom.ANNE,
       shift: classroom.shift,
       level: classroom.level,
+      students,
     };
   });
   return {
